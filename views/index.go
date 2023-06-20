@@ -1,12 +1,10 @@
 package views
 
 import (
-	"fmt"
+	"goweb/common"
 	"goweb/config"
 	"goweb/models"
-	"html/template"
 	"net/http"
-	"time"
 )
 
 type IndexData struct {
@@ -14,32 +12,8 @@ type IndexData struct {
 	Desc  string `json:"desc"`
 }
 
-func IsODD(num int) bool {
-	return num%2 == 0
-}
-func GetNextName(strs []string, index int) string {
-	return strs[index+1]
-}
-func Date(layout string) string {
-	return time.Now().Format(layout)
-}
-
 func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
-	t := template.New("index.html")
-	//1. 拿到当前的路径
-	path := config.Cfg.System.CurrentDir
-	//访问博客首页模板的时候，因为有多个模板的嵌套，解析文件的时候，需要将其涉及到的所有模板都进行解析
-	home := path + "/template/template/home.html"
-	header := path + "/template/template/layout/header.html"
-	footer := path + "/template/template/layout/footer.html"
-	personal := path + "/template/template/layout/personal.html"
-	post := path + "/template/template/layout/post-list.html"
-	pagination := path + "/template/template/layout/pagination.html"
-	t.Funcs(template.FuncMap{"isODD": IsODD, "getNextName": GetNextName, "date": Date})
-	t, err := t.ParseFiles(path+"/template/template/index.html", home, header, footer, personal, post, pagination)
-	if err != nil {
-		fmt.Println("出错：", err)
-	}
+	index := common.Template.Index
 	//页面上涉及到的所有的数据，必须有定义
 	var categorys = []models.Category{
 		{
@@ -69,6 +43,6 @@ func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
 		[]int{1},
 		true,
 	}
-	t.Execute(w, hr)
 
+	index.WriteData(w, hr)
 }

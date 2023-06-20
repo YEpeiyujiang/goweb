@@ -1,10 +1,16 @@
 package main
 
 import (
+	"goweb/common"
 	"goweb/router"
 	"log"
 	"net/http"
 )
+
+func init() {
+	//模板加载
+	common.LoadTemplate()
+}
 
 func main() {
 	//程序入口，一个项目 只能有一个入口
