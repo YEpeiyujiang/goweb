@@ -2,6 +2,12 @@ package dao
 
 import "goweb/models"
 
+func CountGetAllPost() (count int) {
+	rows := DB.QueryRow("select count(1) from blog_post")
+	_ = rows.Scan(&count)
+	return
+}
+
 func GetpostPage(page, pageSize int) ([]models.Post, error) {
 	page = (page - 1) * pageSize
 	rows, err := DB.Query("select * from blog_post limit ?,?", page, pageSize)

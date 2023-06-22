@@ -38,14 +38,20 @@ func GetAllIndexInfo(page, pageSize int) (*models.HomeResponse, error) {
 		}
 		postMores = append(postMores, postMore)
 	}
+	total := dao.CountGetAllPost()
+	pagesCount := (total-1)/10 + 1
+	var pages []int
+	for i := 0; i < pagesCount; i++ {
+		pages = append(pages, i+1)
+	}
 	var hr = &models.HomeResponse{
 		config.Cfg.Viewer,
 		categorys,
 		postMores,
-		1,
-		1,
-		[]int{1},
-		true,
+		total,
+		page,
+		pages,
+		page != pagesCount,
 	}
 	return hr, nil
 }
