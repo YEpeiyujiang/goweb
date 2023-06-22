@@ -2,6 +2,7 @@ package views
 
 import (
 	"errors"
+	"fmt"
 	"goweb/common"
 	"goweb/service"
 	"log"
@@ -15,6 +16,7 @@ type IndexData struct {
 }
 
 func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("路由/")
 	index := common.Template.Index
 	//页面上涉及到的所有的数据，必须有定义
 	//数据库查询
