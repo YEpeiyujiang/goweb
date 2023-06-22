@@ -4,31 +4,44 @@ import (
 	"goweb/config"
 	"goweb/dao"
 	"goweb/models"
+	"html/template"
 )
 
-func GetAllIndexInfo() (*models.HomeResponse, error) {
+func GetAllIndexInfo(page, pageSize int) (*models.HomeResponse, error) {
 	//数据库查询
 	categorys, err := dao.GetAllCategory()
 	if err != nil {
 		return nil, err
 	}
-	var posts = []models.PostMore{
-		{
-			Pid:          1,
-			Title:        "go博客",
-			Content:      "内容",
-			UserName:     "叶培宇",
-			ViewCount:    123,
-			CreateAt:     "2023-6-20",
-			CategoryId:   1,
-			CategoryName: "go",
-			Type:         0,
-		},
+	posts, err := dao.GetpostPage(page, pageSize)
+	var postMores []models.PostMore
+	for _, post := range posts {
+		categoryName := dao.GetCategoryNameById(post.CategoryId)
+		userName := dao.GetuserNameById(post.UserId)
+		content := []rune(post.Content)
+		if len(content) > 100 {
+			content = content[0:100]
+		}
+		postMore := models.PostMore{
+			post.Pid,
+			post.Title,
+			post.Slug,
+			template.HTML(content),
+			post.CategoryId,
+			categoryName,
+			post.UserId,
+			userName,
+			post.ViewCount,
+			post.Type,
+			models.DateDay(post.CreateAt),
+			models.DateDay(post.UpdateAt),
+		}
+		postMores = append(postMores, postMore)
 	}
 	var hr = &models.HomeResponse{
 		config.Cfg.Viewer,
 		categorys,
-		posts,
+		postMores,
 		1,
 		1,
 		[]int{1},
