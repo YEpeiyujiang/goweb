@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"fmt"
 	"goweb/models"
 )
 
@@ -42,7 +41,6 @@ func GetpostPage(page, pageSize int) ([]models.Post, error) {
 }
 
 func GetpostPageBycategoryId(cId, page, pageSize int) ([]models.Post, error) {
-	fmt.Println("输出传的ID============================：", cId)
 	page = (page - 1) * pageSize
 	rows, err := DB.Query("select * from blog_post where category_id = ? limit ?,?", cId, page, pageSize)
 	if err != nil {

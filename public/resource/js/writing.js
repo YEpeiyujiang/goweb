@@ -37,6 +37,7 @@ function initEditor() {
 function uploadImage(file, cb) {
   const config = {
     useCdnDomain: true,
+    //自行去改七牛云的空间区域的配置
     region: qiniu.region.z1
   };
   const putExtra = {

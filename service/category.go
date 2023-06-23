@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"goweb/config"
 	"goweb/dao"
 	"goweb/models"
@@ -10,7 +9,6 @@ import (
 
 func GetPostsByCategoryId(cId, page, pageSize int) (*models.GetegoryResponse, error) {
 	//数据库查询
-	fmt.Println("传出id222222222222222222222223:", cId)
 	categorys, err := dao.GetAllCategory()
 	if err != nil {
 		return nil, err
@@ -19,7 +17,7 @@ func GetPostsByCategoryId(cId, page, pageSize int) (*models.GetegoryResponse, er
 	var postMores []models.PostMore
 	for _, post := range posts {
 		categoryName := dao.GetCategoryNameById(post.CategoryId)
-		userName := dao.GetuserNameById(post.UserId)
+		userName := dao.GetUserNameById(post.UserId)
 		content := []rune(post.Content)
 		if len(content) > 100 {
 			content = content[0:100]

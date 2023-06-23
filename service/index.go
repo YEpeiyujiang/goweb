@@ -17,24 +17,24 @@ func GetAllIndexInfo(page, pageSize int) (*models.HomeResponse, error) {
 	var postMores []models.PostMore
 	for _, post := range posts {
 		categoryName := dao.GetCategoryNameById(post.CategoryId)
-		userName := dao.GetuserNameById(post.UserId)
+		userName := dao.GetUserNameById(post.UserId)
 		content := []rune(post.Content)
 		if len(content) > 100 {
 			content = content[0:100]
 		}
 		postMore := models.PostMore{
-			post.Pid,
-			post.Title,
-			post.Slug,
-			template.HTML(content),
-			post.CategoryId,
-			categoryName,
-			post.UserId,
-			userName,
-			post.ViewCount,
-			post.Type,
-			models.DateDay(post.CreateAt),
-			models.DateDay(post.UpdateAt),
+			Pid:          post.Pid,
+			Title:        post.Title,
+			Slug:         post.Slug,
+			Content:      template.HTML(content),
+			CategoryId:   post.CategoryId,
+			CategoryName: categoryName,
+			UserId:       post.UserId,
+			UserName:     userName,
+			ViewCount:    post.ViewCount,
+			Type:         post.Type,
+			CreateAt:     models.DateDay(post.CreateAt),
+			UpdateAt:     models.DateDay(post.UpdateAt),
 		}
 		postMores = append(postMores, postMore)
 	}
@@ -45,13 +45,13 @@ func GetAllIndexInfo(page, pageSize int) (*models.HomeResponse, error) {
 		pages = append(pages, i+1)
 	}
 	var hr = &models.HomeResponse{
-		config.Cfg.Viewer,
-		categorys,
-		postMores,
-		total,
-		page,
-		pages,
-		page != pagesCount,
+		Viewer:    config.Cfg.Viewer,
+		Categorys: categorys,
+		Posts:     postMores,
+		Total:     total,
+		Page:      page,
+		Pages:     pages,
+		PageEnd:   page != pagesCount,
 	}
 	return hr, nil
 }
