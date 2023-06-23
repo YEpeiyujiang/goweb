@@ -13,6 +13,6 @@
     QiniuAccessKey = "替换自己的"
     QiniuSecretKey = "替换自己的"
     Valine = true
-    ValineAppid = "替换自己的"
-    ValineAppkey = "替换自己的"
-    ValineServerURL = "替换自己的"
+    ValineAppid = "oOAKEPSW31bmcc4oTHtCyCce-gzGzoHsz"
+    ValineAppkey = "aQExxGhgr5MQWxEL619T08OQ"
+    ValineServerURL = "https://ooakepsw.lc-cn-n1-shared.com"
