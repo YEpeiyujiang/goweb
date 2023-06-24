@@ -19,5 +19,6 @@ func Router() {
 	http.HandleFunc("/api/v1/qiniu/token", api.API.QiniuToken)
 	http.HandleFunc("/p/", views.HTML.Detail) //文章详情页
 	http.HandleFunc("/writing", views.HTML.Writing)
+	http.HandleFunc("/api/v1/post/search", api.API.SearchPost) //用于搜索
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }
