@@ -10,6 +10,7 @@ import (
 	"goweb/utils"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -33,6 +34,32 @@ func (*Api) SaveAndUpdatePost(w http.ResponseWriter, r *http.Request) {
 	uid := claim.Uid
 	method := r.Method
 	switch method {
+	case http.MethodPut:
+		params := common.GetRequestJsonParam(r)
+		cId := params["categoryId"].(string)
+		categoryId, _ := strconv.Atoi(cId)
+		content := params["content"].(string)
+		markdown := params["markdown"].(string)
+		slug := params["slug"].(string)
+		title := params["title"].(string)
+		postType := params["type"].(float64)
+		pidFloat := params["pid"].(float64)
+		pid := int(pidFloat)
+		pType := int(postType)
+		post := &models.Post{
+			Pid:        pid,
+			Title:      title,
+			Slug:       slug,
+			Content:    content,
+			Markdown:   markdown,
+			CategoryId: categoryId,
+			UserId:     uid,
+			Type:       pType,
+			CreateAt:   time.Now(),
+			UpdateAt:   time.Now(),
+		}
+		service.UpdatePost(post)
+		common.Success(w, post)
 	case http.MethodPost:
 		params := common.GetRequestJsonParam(r)
 		cId := params["categoryId"].(string)
@@ -57,8 +84,23 @@ func (*Api) SaveAndUpdatePost(w http.ResponseWriter, r *http.Request) {
 		}
 		service.SavePost(post)
 		common.Success(w, post)
-	case http.MethodPut:
 	}
 	common.GetRequestJsonParam(r)
+}
 
+func (*Api) GetPost(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	fmt.Println(path)
+	pIdStr := strings.TrimPrefix(path, "/api/v1/post/")
+	pid, err := strconv.Atoi(pIdStr)
+	if err != nil {
+		common.Error(w, errors.New("不识别此请求路径"))
+		return
+	}
+	post, err := dao.GetPostById(pid)
+	if err != nil {
+		common.Error(w, err)
+		return
+	}
+	common.Success(w, post)
 }

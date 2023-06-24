@@ -55,3 +55,6 @@ func Writing() (wr models.WritingRes) {
 func SavePost(post *models.Post) {
 	dao.SavePost(post)
 }
+func UpdatePost(post *models.Post) {
+	dao.UpdatePost(post)
+}
