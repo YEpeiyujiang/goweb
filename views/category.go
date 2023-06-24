@@ -2,7 +2,6 @@ package views
 
 import (
 	"errors"
-	"fmt"
 	"goweb/common"
 	"goweb/service"
 	"log"
@@ -12,7 +11,6 @@ import (
 )
 
 func (*HTMLApi) Category(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("发起调用")
 	categoryTemplate := common.Template.Category
 	path := r.URL.Path
 	cIdStr := strings.TrimPrefix(path, "/c/")
@@ -34,8 +32,6 @@ func (*HTMLApi) Category(w http.ResponseWriter, r *http.Request) {
 	page, _ := strconv.Atoi(pageStr)
 	//每一页显示的数量
 	pageSize := 10
-
-	fmt.Println("传出id222222222222222222222223:", cId)
 
 	categoryResponse, err := service.GetPostsByCategoryId(cId, page, pageSize)
 	if err != nil {
