@@ -1,10 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"goweb/config"
 	"goweb/dao"
 	"goweb/models"
 	"html/template"
+	"log"
 )
 
 func GetPostDetail(pid int) (*models.PostRes, error) {
@@ -35,4 +37,21 @@ func GetPostDetail(pid int) (*models.PostRes, error) {
 		postMore,
 	}
 	return postRes, nil
+}
+
+func Writing() (wr models.WritingRes) {
+	fmt.Println("插入数据库")
+	wr.Title = config.Cfg.Viewer.Title
+	wr.CdnURL = config.Cfg.System.CdnURL
+	category, err := dao.GetAllCategory()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	wr.Categorys = category
+	return
+}
+
+func SavePost(post *models.Post) {
+	dao.SavePost(post)
 }
